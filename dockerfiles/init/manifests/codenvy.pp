@@ -368,6 +368,11 @@ $machine_docker_parent_cgroup = getValue("CODENVY_DOCKER_PARENT_CGROUP","NULL")
   $user_mail_blacklist = getValue("CODENVY_USER_MAIL_BLACKLIST","")
 
 ###############################
+# Predefined stacks loading policy
+#
+$codenvy_default_stacks_overwrite=getValue("CODENVY_DEFAULT_STACKS_OVERWRITE","true")
+
+###############################
 # Include base module
   include base
 }

@@ -16,13 +16,13 @@ package com.codenvy.api.permission.server.filter;
 
 import com.codenvy.api.permission.server.InstanceParameterValidator;
 import com.codenvy.api.permission.server.SuperPrivilegesChecker;
+import com.codenvy.api.permission.server.filter.check.DomainsPermissionsCheckers;
 import com.codenvy.api.permission.shared.dto.PermissionsDto;
 
 import org.eclipse.che.api.core.BadRequestException;
 import org.eclipse.che.api.core.ForbiddenException;
 import org.eclipse.che.api.core.NotFoundException;
 import org.eclipse.che.api.core.ServerException;
-import org.eclipse.che.commons.env.EnvironmentContext;
 import org.eclipse.che.everrest.CheMethodInvokerFilter;
 import org.everrest.core.Filter;
 import org.everrest.core.resource.GenericResourceMethod;
@@ -30,7 +30,6 @@ import org.everrest.core.resource.GenericResourceMethod;
 import javax.inject.Inject;
 import javax.ws.rs.Path;
 
-import static com.codenvy.api.permission.server.AbstractPermissionsDomain.SET_PERMISSIONS;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
@@ -47,23 +46,21 @@ public class SetPermissionsFilter extends CheMethodInvokerFilter {
     @Inject
     private InstanceParameterValidator instanceValidator;
 
+    @Inject
+    private DomainsPermissionsCheckers domainsPermissionsChecker;
+
     @Override
-    public void filter(GenericResourceMethod genericResourceMethod, Object[] arguments)
-            throws BadRequestException, ForbiddenException, NotFoundException, ServerException {
-        final String methodName = genericResourceMethod.getMethod().getName();
-        if (methodName.equals("storePermissions")) {
-            final PermissionsDto permissions = (PermissionsDto)arguments[0];
+    public void filter(GenericResourceMethod genericResourceMethod, Object[] args) throws BadRequestException,
+                                                                                          ForbiddenException,
+                                                                                          NotFoundException,
+                                                                                          ServerException {
+        if (genericResourceMethod.getMethod().getName().equals("storePermissions")) {
+            final PermissionsDto permissions = (PermissionsDto)args[0];
             checkArgument(permissions != null, "Permissions descriptor required");
-            checkArgument(!isNullOrEmpty(permissions.getDomainId()), "Domain required");
-            instanceValidator.validate(permissions.getDomainId(), permissions.getInstanceId());
-
-            if (superPrivilegesChecker.isPrivilegedToManagePermissions(permissions.getDomainId())) {
-                return;
-            }
-
-            if (!EnvironmentContext.getCurrent().getSubject().hasPermission(permissions.getDomainId(),
-                                                                            permissions.getInstanceId(),
-                                                                            SET_PERMISSIONS)) {
+            final String domain = permissions.getDomainId();
+            checkArgument(!isNullOrEmpty(domain), "Domain required");
+            instanceValidator.validate(domain, permissions.getInstanceId());
+            if (!domainsPermissionsChecker.getSetChecker(domain).isPermitted(permissions)) {
                 throw new ForbiddenException("User can't edit permissions for this instance");
             }
         }

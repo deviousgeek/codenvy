@@ -18,6 +18,9 @@ import com.codenvy.api.permission.server.account.AccountPermissionsChecker;
 import com.codenvy.api.permission.server.filter.GetPermissionsFilter;
 import com.codenvy.api.permission.server.filter.RemovePermissionsFilter;
 import com.codenvy.api.permission.server.filter.SetPermissionsFilter;
+import com.codenvy.api.permission.server.filter.check.DefaultRemovePermissionsChecker;
+import com.codenvy.api.permission.server.filter.check.DefaultSetPermissionsChecker;
+import com.codenvy.api.permission.server.filter.check.DomainsPermissionsCheckers;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
@@ -41,5 +44,8 @@ public class PermissionsModule extends AbstractModule {
 
         //initialize empty set binder
         Multibinder.newSetBinder(binder(), AccountPermissionsChecker.class);
+        bind(DefaultSetPermissionsChecker.class);
+        bind(DefaultRemovePermissionsChecker.class);
+        bind(DomainsPermissionsCheckers.class);
     }
 }
