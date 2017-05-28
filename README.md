@@ -1,5 +1,5 @@
 # Codenvy 
-Cloud workspaces for development teams. One-click Docker environments to create workspaces [with production runtimes](https://codenvy.com/solutions/bootstrapping). [Team onboarding and collaboraiton with workspace automation](https://codenvy.com/product/next-generation) and permissions letting devs sync their desktop IDE or use our gorgeous Eclipse Che IDE. [Workspace platform for DevOps](https://codenvy.com/product/technology) to manage workspaces at scale with programmable and customizable infrastructure.
+Cloud workspaces for development teams. One-click Docker environments to create workspaces [with production runtimes](https://codenvy.com/solutions/bootstrapping). [Team onboarding and collaboration with workspace automation](https://codenvy.com/product/next-generation) and permissions letting devs sync their desktop IDE or use our gorgeous Eclipse Che IDE. [Workspace platform for DevOps](https://codenvy.com/product/technology) to manage workspaces at scale with programmable and customizable infrastructure.
  
 ![Eclipse Che](https://www.eclipse.org/che/images/banner@2x.png "Eclipse Che")
 
